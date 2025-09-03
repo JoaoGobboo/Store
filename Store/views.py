@@ -52,36 +52,32 @@ def carrinho(request):
 
 def produtos_crud(request):
     lista_produtos = Produto.objects.all()
-    return render(request, 'Store/produtos_crud.html', {'lista': lista_produtos})
+    form_criar = ProdutoForm()
 
-
-def produto_novo(request):
     if request.method == "POST":
-        form = ProdutoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('produtos_crud')  # redireciona para a lista de produtos
-    else:
-        form = ProdutoForm()
-    return render(request, 'Store/produto_form.html', {'form': form})
+        acao = request.POST.get("acao")
+        produto_id = request.POST.get("produto_id")
 
+        if acao == "deletar" and produto_id:
+            produto = get_object_or_404(Produto, id=produto_id)
+            produto.delete()
+            return redirect("produtos_crud")
 
-def produto_editar(request, produto_id):
-    produto = get_object_or_404(Produto, id=produto_id)
-    if request.method == "POST":
-        form = ProdutoForm(request.POST, instance=produto)
-        if form.is_valid():
-            form.save()
-            return redirect('produtos_crud')
-    else:
-        form = ProdutoForm(instance=produto)
-    return render(request, 'Store/produto_form.html', {'form': form})
+        elif acao == "editar" and produto_id:
+            produto = get_object_or_404(Produto, id=produto_id)
+            form_editar = ProdutoForm(request.POST, instance=produto)
+            if form_editar.is_valid():
+                form_editar.save()
+                return redirect("produtos_crud")
 
+        elif acao == "criar":
+            form_criar = ProdutoForm(request.POST)
+            if form_criar.is_valid():
+                form_criar.save()
+                return redirect("produtos_crud")
 
-def produto_deletar(request, produto_id):
-    produto = get_object_or_404(Produto, id=produto_id)
-    if request.method == "POST":
-        produto.delete()
-        return redirect('produtos_crud')
-    return render(request, 'Store/produto_confirm_delete.html', {'produto': produto})
-
+    context = {
+        "lista": lista_produtos,
+        "form_criar": form_criar,
+    }
+    return render(request, "produtos_crud.html", context)

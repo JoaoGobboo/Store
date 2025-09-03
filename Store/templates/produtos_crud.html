@@ -2,25 +2,60 @@
 
 {% block body %}
 <h1>Gerenciar Produtos</h1>
-<a href="{% url 'produto_criar' %}" class="btn-criar">Adicionar Novo Produto</a>
 
+<!-- Formulário de Criação -->
+<h2>Adicionar Novo Produto</h2>
+<form method="post" action="{% url 'produtos_crud' %}">
+    {% csrf_token %}
+    <input type="hidden" name="acao" value="criar">
+    {{ form_criar.as_p }}
+    <button type="submit" class="btn-criar">Salvar</button>
+</form>
+
+<hr>
+
+<!-- Lista de Produtos -->
+<h2>Produtos Cadastrados</h2>
 <table>
     <thead>
         <tr>
             <th>Nome</th>
             <th>Preço</th>
+            <th>Categoria</th>
             <th>Ações</th>
         </tr>
     </thead>
     <tbody>
     {% for produto in lista %}
         <tr>
-            <td>{{ produto.nome }}</td>
-            <td>R$ {{ produto.preco|floatformat:2 }}</td>
             <td>
-                <a href="{% url 'produto_editar' produto.id %}" class="btn-editar">Editar</a>
-                <a href="{% url 'produto_deletar' produto.id %}" class="btn-deletar">Deletar</a>
+                <form method="post" action="{% url 'produtos_crud' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="produto_id" value="{{ produto.id }}">
+                    <input type="hidden" name="acao" value="editar">
+                    <input type="text" name="nome" value="{{ produto.nome }}" placeholder="Nome">
             </td>
+            <td>
+                    <input type="number" step="0.01" name="preco" value="{{ produto.preco }}" placeholder="Preço">
+            </td>
+            <td>
+                    <input type="text" name="categoria" value="{{ produto.categoria }}" placeholder="Categoria">
+            </td>
+            <td>
+                    <button type="submit" class="btn-editar">Editar</button>
+                </form>
+
+                <form method="post" action="{% url 'produtos_crud' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="produto_id" value="{{ produto.id }}">
+                    <input type="hidden" name="acao" value="deletar">
+                    <button type="submit" class="btn-deletar">Deletar</button>
+                </form>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="4">Nenhum produto cadastrado.</td>
         </tr>
     {% endfor %}
     </tbody>
