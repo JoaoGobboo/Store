@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1>Gerenciar Produtos</h1>
+<a href="{% url 'produto_criar' %}" class="btn-criar">Adicionar Novo Produto</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for produto in lista %}
+        <tr>
+            <td>{{ produto.nome }}</td>
+            <td>R$ {{ produto.preco|floatformat:2 }}</td>
+            <td>
+                <a href="{% url 'produto_editar' produto.id %}" class="btn-editar">Editar</a>
+                <a href="{% url 'produto_deletar' produto.id %}" class="btn-deletar">Deletar</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

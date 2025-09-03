@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}Minha Loja{% endblock %}
+    </title>
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <h1>{% block header %}Minha Loja Bonita{% endblock %}</h1>
+        <nav>
+            <a href="{% url 'Store' %}">Loja</a> |
+            <a href="{% url 'carrinho' %}">Carrinho</a> |
+        </nav>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <main>
+        {% block body %}
+        <p>Conteúdo principal aqui</p>
+        {% endblock %}
+    </main>
+
+    <!-- Rodapé -->
+    <footer>
+        {% block footer %}
+        <p>&copy; 2025 Minha Loja. Todos os direitos reservados.</p>
+        {% endblock %}
+    </footer>
+
+    <!-- Scripts adicionais -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

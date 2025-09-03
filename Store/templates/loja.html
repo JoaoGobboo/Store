@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<main class="loja-principal">
+    <header class="loja-header">
+        <h1>{{ titulo }}</h1>
+        <h2>Bem-vindo, {{ usuario }}!</h2>
+    </header>
+
+    {% if lista %}
+        <section class="produtos-lista">
+            {% for produto in lista %}
+            <article class="produto-card">
+                <h3 class="produto-nome">
+                    <a href="{% url 'produto_detalhe' produto.id %}">
+                        {{ produto.nome }}
+                    </a>
+                </h3>
+                <p class="produto-preco">R$ {{ produto.preco|floatformat:2 }}</p>
+                <a href="{% url 'adicionar_carrinho' produto.id %}" class="btn-adicionar">
+                    Adicionar ao Carrinho
+                </a>
+            </article>
+            {% endfor %}
+        </section>
+    {% else %}
+        <p class="nenhum-produto">Nenhum produto disponível.</p>
+    {% endif %}
+
+    <footer class="loja-footer">
+        <p><a href="{% url 'carrinho' %}" class="btn-ver-carrinho">Ver Carrinho</a></p>
+    </footer>
+</main>
+{% endblock %}

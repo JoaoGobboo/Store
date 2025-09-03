@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<main class="produto-detalhe">
+    <header>
+        <h1>{{ produto.nome }}</h1>
+    </header>
+
+    <section class="produto-info">
+        {% if produto.imagem %}
+            <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" class="produto-imagem">
+        {% endif %}
+
+        <p class="produto-preco"><strong>Preço:</strong> R$ {{ produto.preco|floatformat:2 }}</p>
+
+        {% if produto.descricao %}
+            <p class="produto-descricao">{{ produto.descricao }}</p>
+        {% endif %}
+
+        <a href="{% url 'adicionar_carrinho' produto.id %}" class="btn-adicionar">
+            Adicionar ao Carrinho
+        </a>
+        <p><a href="{% url 'Store' %}">&larr; Voltar para a loja</a></p>
+    </section>
+</main>
+{% endblock %}
